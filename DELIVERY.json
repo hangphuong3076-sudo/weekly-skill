@@ -1,0 +1,22 @@
+{
+  "name": "weekly-skill",
+  "kind": "skill",
+  "entrypoint": "SKILL.md",
+  "usage": "把整包复制到 <你的技能目录>/weekly-skill（目录名需与 SKILL.md frontmatter 的 name 一致，例如技能根目录下的 weekly-skill/）。用你自己的稿件与文献库运行：python <技能目录>/weekly-skill/scripts/citation_pipeline.py --manuscript 你的稿件.md --refs 你的文献库.bib --outdir ./out 。评测/比赛场景可用 --case /input/case.json 让 case.json 提供 case_id、inputs.manuscript、inputs.refs 并镜像 output_contract（相对路径按 case.json 所在目录解析）。运行后读 out/result.json 的 status / consistency.ok / warnings，成品为 out/manuscript.updated.md 与 out/references.gbt7714.md。先跑 python <技能目录>/weekly-skill/scripts/selfcheck.py（23 项不变量，退出码 0/1）确认安装可用。",
+  "inputs": [
+    "稿件文件（Markdown/纯文本，含 [1]/[2,3]/[4-6] 式顺序编码标记；文末可自带参考文献节）",
+    "文献库文件（BibTeX / RIS / CSL-JSON / 纯文本编号列表；编码可为 UTF-8 / UTF-8 BOM / GB18030）",
+    "可选 case.json（提供 case_id、inputs.manuscript、inputs.refs 与 output_contract；相对路径按其所在目录解析）"
+  ],
+  "outputs": [
+    "manuscript.updated.md：可编辑改稿（正文编号连锁更新 + 重建的参考文献节 + 自动标注注释块；正文论断零改写）",
+    "references.gbt7714.md：同步文献表（GB/T 7714—2015 顺序编码制；未引用条目标注）",
+    "result.json：结构化结果（case_id、status、main_result、sources、uncertainty、changes、consistency、warnings，并原样镜像 output_contract 全部字段）"
+  ],
+  "requirements": [
+    "Python 3.8+（开发验证环境 Python 3.13.5 / Windows），仅标准库，无需 pip 安装",
+    "默认离线运行，无网络权限需求；可选 --verify-doi online 需出网访问 doi.org handle API（未开启即如实记 not_attempted）",
+    "无需写系统目录；仅需对 --outdir 输出目录有写权限",
+    "包资源上限符合题面：≤50 个 UTF-8 文本文件、单个 ≤500KB、总计 ≤2MB、无 symlink（本包 9 个文件）"
+  ]
+}
